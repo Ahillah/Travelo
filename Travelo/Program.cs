@@ -1,4 +1,8 @@
 
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Persistence.Identity;
+
 namespace Travelo
 {
     public class Program
@@ -12,6 +16,13 @@ namespace Travelo
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            builder.Services.AddDbContext<TraveloIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+
+
+
+            });
 
             var app = builder.Build();
 
