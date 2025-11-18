@@ -1,4 +1,6 @@
-﻿using DomainLayer.Models.Users;
+﻿using DomainLayer.Models.IdentityModule;
+using DomainLayer.Models.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,9 +13,15 @@ namespace Persistence.Identity
 {
     public class TraveloIdentityDbContext(DbContextOptions<TraveloIdentityDbContext> options): IdentityDbContext<ApplicationUser>(options)
     {
+        public DbSet<SecurityUser> SecurityUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+          
+            builder.Entity<ApplicationUser>().ToTable("Users");
+
+
+            builder.Entity<IdentityRole>().ToTable("Roles");
         }
     }
 }

@@ -1,7 +1,12 @@
 
+using DomainLayer.Models.IdentityModule;
+using DomainLayer.Models.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Identity;
+using ServiceAbstraction;
+using ServiceImplementation;
 
 namespace Travelo
 {
@@ -23,7 +28,10 @@ namespace Travelo
 
 
             });
-
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+              .AddEntityFrameworkStores<TraveloIdentityDbContext>()
+              .AddDefaultTokenProviders();
+            builder.Services.AddScoped<ISecurityAuthService, SecurityAuthService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
