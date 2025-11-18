@@ -14,4 +14,8 @@
     <ProjectReference Include="..\..\Core\ServiceImplementation\ServiceImplementation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Identity\Migrations\" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Models.IdentityModule;
 using DomainLayer.Models.Users;
+
 using Microsoft.AspNetCore.Identity;
 using ServiceAbstraction;
 using Shared;
@@ -12,8 +13,15 @@ using System.Threading.Tasks;
 
 namespace ServiceImplementation
 {
-    public class SecurityAuthService(UserManager<SecurityUser> userManager) : ISecurityAuthService
+    public class SecurityAuthService : ISecurityAuthService
     {
+        private readonly UserManager<ApplicationUser> userManager;
+
+        
+        public SecurityAuthService (UserManager<ApplicationUser>  userManager)
+        {
+           this.userManager = userManager;
+        }
         public async Task<AuthResponseDto> LoginAsync(LoginDto login)
         {
             var user = await userManager.FindByEmailAsync(login.Email);
