@@ -1,0 +1,6 @@
+@Travelo_HostAddress = http://localhost:5047
+
+GET {{Travelo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
