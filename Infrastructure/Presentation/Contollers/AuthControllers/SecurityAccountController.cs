@@ -12,7 +12,7 @@ namespace Presentation.Contollers.AuthControllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SecurityController(ISecurityAuthService authService):ControllerBase
+    public class SecurityAccountController(ISecurityAuthService authService):ControllerBase
     {
         //Login
         [HttpPost("Login")]

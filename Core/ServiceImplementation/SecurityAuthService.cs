@@ -2,12 +2,16 @@
 using DomainLayer.Models.Users;
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using ServiceAbstraction;
 using Shared;
 using Shared.Dto_s.IdentityDto_s;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,11 +20,12 @@ namespace ServiceImplementation
     public class SecurityAuthService : ISecurityAuthService
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IConfiguration configuration;
 
-        
-        public SecurityAuthService (UserManager<ApplicationUser>  userManager)
+        public SecurityAuthService (UserManager<ApplicationUser>  userManager,IConfiguration configuration)
         {
            this.userManager = userManager;
+            this.configuration = configuration;
         }
         public async Task<AuthResponseDto> LoginAsync(LoginDto login)
         {
@@ -49,7 +54,7 @@ namespace ServiceImplementation
                 DisplayName = user.DisplayName,
                 Email = user.Email,
                 IsSuccess = true,
-                Token = CreateTokenAsync(user),
+                Token = await CreateTokenAsync(user),
                 UserType = user.UserType
             };
         }
@@ -77,7 +82,7 @@ namespace ServiceImplementation
                     IsSuccess = true,
                     DisplayName = User.DisplayName,
                     Email = User.Email,
-                    Token = CreateTokenAsync(User),
+                    Token = await CreateTokenAsync(User),
                     UserType = User.UserType
                 };
 
@@ -94,9 +99,33 @@ namespace ServiceImplementation
             }
         }
 
-        private static string CreateTokenAsync(ApplicationUser user)
+        private async Task<string> CreateTokenAsync(ApplicationUser user)
         {
-            return "";
+            var claim = new List<Claim>()
+            {
+              new Claim (ClaimTypes.Email, user.Email!),
+              new Claim(ClaimTypes.Name,user.DisplayName!),
+              new Claim(ClaimTypes.NameIdentifier,user.Id!)
+
+            };
+            var Roles= await userManager.GetRolesAsync(user);
+            foreach (var Role in Roles)
+            {
+                claim.Add(new Claim(ClaimTypes.Role, Role));
+            }
+            var secretKey = configuration.GetSection("JwtOptions")["SecretKey"];
+            var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var Creds= new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
+            var Token = new JwtSecurityToken(
+               issuer: configuration.GetSection("JwtOptions")["Issuer"],
+               audience: configuration.GetSection("JwtOptions")["Audience"], 
+               signingCredentials: Creds,
+               expires: DateTime.Now.AddHours(1),
+               claims: claim
+                
+                
+                );
+            return new JwtSecurityTokenHandler().WriteToken(Token);
         }
 
         public Task<bool> ForgotPasswordAsync(string email)
