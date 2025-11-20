@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using ServiceAbstraction;
 using Shared;
 using Shared.Dto_s.IdentityDto_s;
+using Shared.Dto_s.IdentityDto_s.SecurityUser;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,7 +16,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceImplementation
+namespace ServiceImplementation.IdentityService
 {
     public class SecurityAuthService : ISecurityAuthService
     {
@@ -99,7 +100,7 @@ namespace ServiceImplementation
             }
         }
 
-        private async Task<string> CreateTokenAsync(ApplicationUser user)
+        public async Task<string> CreateTokenAsync(ApplicationUser user)
         {
             var claim = new List<Claim>()
             {
@@ -108,33 +109,47 @@ namespace ServiceImplementation
               new Claim(ClaimTypes.NameIdentifier,user.Id!)
 
             };
-            var Roles= await userManager.GetRolesAsync(user);
+            var Roles = await userManager.GetRolesAsync(user);
             foreach (var Role in Roles)
             {
                 claim.Add(new Claim(ClaimTypes.Role, Role));
             }
             var secretKey = configuration.GetSection("JwtOptions")["SecretKey"];
             var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var Creds= new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
+            var Creds = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
             var Token = new JwtSecurityToken(
                issuer: configuration.GetSection("JwtOptions")["Issuer"],
-               audience: configuration.GetSection("JwtOptions")["Audience"], 
+               audience: configuration.GetSection("JwtOptions")["Audience"],
                signingCredentials: Creds,
                expires: DateTime.Now.AddHours(1),
                claims: claim
-                
-                
+
+
                 );
             return new JwtSecurityTokenHandler().WriteToken(Token);
         }
 
-        public Task<bool> ForgotPasswordAsync(string email)
+
+
+        public async  Task<bool> ForgotPasswordAsync(ForgetPasswordDto passwordDto)
         {
-            throw new NotImplementedException();
+            var User = await userManager.FindByEmailAsync(passwordDto.Email);
+            if (User is null)
+                return true;
+            else
+            {
+                var token = await userManager.GeneratePasswordResetTokenAsync(User);
+                var verificationCodeBody = $"Your password reset code is: {token}. Please use this code to reset your password.";
+                var email = new Email()
+                {
+                    To = passwordDto.Email,
+                    Subject = "Varify Code",
+                    Body = verificationCodeBody
+
+                };
+                EmailSetting.SendEmail(email);
+
+            }
         }
-
-       
-
-      
     }
 }

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ServiceAbstraction;
 using Shared;
 using Shared.Dto_s.IdentityDto_s;
+using Shared.Dto_s.IdentityDto_s.SecurityUser;
 
 namespace Presentation.Contollers.AuthControllers
 {
@@ -37,6 +40,14 @@ namespace Presentation.Contollers.AuthControllers
                 return BadRequest(User);
             }
             return Ok(User);
+        }
+        [HttpGet]
+        public async Task<ActionResult> ForgitPassword()
+        { }
+        [HttpPost]
+        public async Task<ActionResult> VarifyCode(ForgetPasswordDto passwordDto)
+        { 
+          
         }
     }
 }

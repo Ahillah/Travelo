@@ -1,5 +1,6 @@
 ﻿using Shared;
 using Shared.Dto_s.IdentityDto_s;
+using Shared.Dto_s.IdentityDto_s.SecurityUser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,8 @@ namespace ServiceAbstraction
         //Login
         Task<AuthResponseDto> LoginAsync(LoginDto login);
         Task<AuthResponseDto> RegisterAsync(RegisterDto model);
-        Task<bool> ForgotPasswordAsync(string email);
+
+        Task<bool> ForgotPasswordAsync(ForgetPasswordDto model);
 
     }
 }
