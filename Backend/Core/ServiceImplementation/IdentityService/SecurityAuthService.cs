@@ -129,27 +129,32 @@ namespace ServiceImplementation.IdentityService
             return new JwtSecurityTokenHandler().WriteToken(Token);
         }
 
-
-
-        public async  Task<bool> ForgotPasswordAsync(ForgetPasswordDto passwordDto)
+        public Task<bool> ForgotPasswordAsync(ForgetPasswordDto model)
         {
-            var User = await userManager.FindByEmailAsync(passwordDto.Email);
-            if (User is null)
-                return true;
-            else
-            {
-                var token = await userManager.GeneratePasswordResetTokenAsync(User);
-                var verificationCodeBody = $"Your password reset code is: {token}. Please use this code to reset your password.";
-                var email = new Email()
-                {
-                    To = passwordDto.Email,
-                    Subject = "Varify Code",
-                    Body = verificationCodeBody
-
-                };
-                EmailSetting.SendEmail(email);
-
-            }
+            throw new NotImplementedException();
         }
+
+
+
+        //public async  Task<bool> ForgotPasswordAsync(ForgetPasswordDto passwordDto)
+        //{
+        //    var User = await userManager.FindByEmailAsync(passwordDto.Email);
+        //    if (User is null)
+        //        return true;
+        //    else
+        //    {
+        //        var token = await userManager.GeneratePasswordResetTokenAsync(User);
+        //        var verificationCodeBody = $"Your password reset code is: {token}. Please use this code to reset your password.";
+        //        var email = new Email()
+        //        {
+        //            To = passwordDto.Email,
+        //            Subject = "Varify Code",
+        //            Body = verificationCodeBody
+
+        //        };
+        //        EmailSetting.SendEmail(email);
+
+        //    }
+        //}
     }
 }

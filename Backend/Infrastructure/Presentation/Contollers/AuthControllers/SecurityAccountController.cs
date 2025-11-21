@@ -41,13 +41,13 @@ namespace Presentation.Contollers.AuthControllers
             }
             return Ok(User);
         }
-        [HttpGet]
-        public async Task<ActionResult> ForgitPassword()
-        { }
-        [HttpPost]
-        public async Task<ActionResult> VarifyCode(ForgetPasswordDto passwordDto)
-        { 
+        //[HttpGet]
+        //public async Task<ActionResult> ForgitPassword()
+        //{ }
+        //[HttpPost]
+        //public async Task<ActionResult> VarifyCode(ForgetPasswordDto passwordDto)
+        //{ 
           
-        }
+        //}
     }
 }
