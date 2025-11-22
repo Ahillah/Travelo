@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace DomainLayer.Models.IdentityModule
 {
-    public class SecurityUser:ApplicationUser
+    public class Tourist:ApplicationUser
     {
     
 
 
         public string IDNumber { get; set; }=default!;
 
-        public string AffiliatedSecurityAgency { get; set; } = default!;
+       
     }
 }

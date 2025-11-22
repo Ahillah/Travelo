@@ -60,7 +60,7 @@ namespace Travelo
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
               .AddEntityFrameworkStores<TraveloIdentityDbContext>()
               .AddDefaultTokenProviders();
-            builder.Services.AddScoped<ISecurityAuthService, SecurityAuthService>();
+            builder.Services.AddScoped<ITouristAuthService, TouristAuthService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

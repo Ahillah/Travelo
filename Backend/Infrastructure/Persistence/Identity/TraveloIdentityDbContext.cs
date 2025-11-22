@@ -14,7 +14,7 @@ namespace Persistence.Identity
     public class TraveloIdentityDbContext(DbContextOptions<TraveloIdentityDbContext> options)
         : IdentityDbContext<ApplicationUser, IdentityRole, string>(options)
     {
-        public DbSet<SecurityUser> SecurityUsers { get; set; }
+        public DbSet<Tourist> Tourists { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

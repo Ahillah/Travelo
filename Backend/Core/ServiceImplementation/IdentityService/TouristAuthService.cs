@@ -18,12 +18,12 @@ using System.Threading.Tasks;
 
 namespace ServiceImplementation.IdentityService
 {
-    public class SecurityAuthService : ISecurityAuthService
+    public class TouristAuthService : ITouristAuthService
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configuration;
 
-        public SecurityAuthService (UserManager<ApplicationUser>  userManager,IConfiguration configuration)
+        public TouristAuthService (UserManager<ApplicationUser>  userManager,IConfiguration configuration)
         {
            this.userManager = userManager;
             this.configuration = configuration;
@@ -61,17 +61,17 @@ namespace ServiceImplementation.IdentityService
         }
         public async Task<AuthResponseDto> RegisterAsync(RegisterDto model)
         {
-            var User = new SecurityUser()
+            var User = new Tourist()
             {
                 Email = model.Email,
                 UserName = model.Email,
                 DisplayName = model.Name,
 
-                UserType = "Security",
+                UserType = "Tourist",
 
 
                 IDNumber = model.IDNumber,
-                AffiliatedSecurityAgency = model.AffiliatedSecurityAgency
+               
 
             };
             var Result = await userManager.CreateAsync(User, model.Password);

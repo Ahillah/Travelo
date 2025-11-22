@@ -12,8 +12,8 @@ using Persistence.Identity;
 namespace Persistence.Identity.Migrations
 {
     [DbContext(typeof(TraveloIdentityDbContext))]
-    [Migration("20251118212454_SecurityUserSetup")]
-    partial class SecurityUserSetup
+    [Migration("20251122122352_TouristAuth")]
+    partial class TouristAuth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,19 +240,15 @@ namespace Persistence.Identity.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DomainLayer.Models.IdentityModule.SecurityUser", b =>
+            modelBuilder.Entity("DomainLayer.Models.IdentityModule.Tourist", b =>
                 {
                     b.HasBaseType("DomainLayer.Models.Users.ApplicationUser");
-
-                    b.Property<string>("AffiliatedSecurityAgency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IDNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasDiscriminator().HasValue("SecurityUser");
+                    b.HasDiscriminator().HasValue("Tourist");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

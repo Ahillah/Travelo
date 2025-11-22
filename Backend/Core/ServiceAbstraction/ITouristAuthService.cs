@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ServiceAbstraction
 {
-    public interface ISecurityAuthService
+    public interface ITouristAuthService
     {
         //Login
         Task<AuthResponseDto> LoginAsync(LoginDto login);
