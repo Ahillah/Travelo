@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Identity;
 
@@ -11,9 +12,11 @@ using Persistence.Identity;
 namespace Persistence.Identity.Migrations
 {
     [DbContext(typeof(TraveloIdentityDbContext))]
-    partial class TraveloIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251122191525_ResetPasswordConfi")]
+    partial class ResetPasswordConfi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,12 +77,14 @@ namespace Persistence.Identity.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ResetPasswordCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ResetPasswordExpiry")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ResetPasswordToken")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")

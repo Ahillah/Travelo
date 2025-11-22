@@ -1,6 +1,7 @@
 ﻿using Shared;
 using Shared.Dto_s.IdentityDto_s;
 using Shared.Dto_s.IdentityDto_s.SecurityUser;
+using Shared.Dto_s.IdentityDto_s.TouristUser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,6 @@ namespace ServiceAbstraction
         Task<AuthResponseDto> RegisterAsync(RegisterDto model);
 
         Task<bool> ForgotPasswordAsync(ForgetPasswordDto model);
-
+        Task<bool> ResetPasswordAsync(ResetPasswordDto resetDto);
     }
 }

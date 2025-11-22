@@ -8,6 +8,7 @@ using ServiceAbstraction;
 using Shared;
 using Shared.Dto_s.IdentityDto_s;
 using Shared.Dto_s.IdentityDto_s.SecurityUser;
+using Shared.Dto_s.IdentityDto_s.TouristUser;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,9 +24,9 @@ namespace ServiceImplementation.IdentityService
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configuration;
 
-        public TouristAuthService (UserManager<ApplicationUser>  userManager,IConfiguration configuration)
+        public TouristAuthService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
-           this.userManager = userManager;
+            this.userManager = userManager;
             this.configuration = configuration;
         }
         public async Task<AuthResponseDto> LoginAsync(LoginDto login)
@@ -47,8 +48,8 @@ namespace ServiceImplementation.IdentityService
                 };
             }
 
-            
-          
+
+
 
             return new AuthResponseDto
             {
@@ -71,7 +72,7 @@ namespace ServiceImplementation.IdentityService
 
 
                 IDNumber = model.IDNumber,
-               
+
 
             };
             var Result = await userManager.CreateAsync(User, model.Password);
@@ -129,32 +130,61 @@ namespace ServiceImplementation.IdentityService
             return new JwtSecurityTokenHandler().WriteToken(Token);
         }
 
-        public Task<bool> ForgotPasswordAsync(ForgetPasswordDto model)
+
+
+
+        public async Task<bool> ForgotPasswordAsync(ForgetPasswordDto passwordDto)
         {
-            throw new NotImplementedException();
+            var User = await userManager.FindByEmailAsync(passwordDto.Email);
+            if (User is null)
+                return false;
+            else
+            {
+                var identityToken = await userManager.GeneratePasswordResetTokenAsync(User);
+                Random random = new Random();
+                string shortCode = random.Next(10000, 99999).ToString();
+
+                var verificationCodeBody = $"Your password reset code is: {shortCode}. Please use this code to reset your password.";
+                User.ResetPasswordCode = shortCode;
+                User.ResetPasswordToken = identityToken;
+                User.ResetPasswordExpiry = DateTime.UtcNow.AddMinutes(10);
+                await userManager.UpdateAsync(User);
+                var email = new Email()
+                {
+                    To = passwordDto.Email,
+                    Subject = "Varify Code",
+                    Body = verificationCodeBody
+
+                };
+                EmailSetting.SendEmail(email);
+                return true;
+            }
         }
 
+        public async Task<bool> ResetPasswordAsync(ResetPasswordDto resetDto)
+        {
+            var User = await userManager.FindByEmailAsync(resetDto.Email);
+            if (User == null)
+                return false;
+            if (User.ResetPasswordCode != resetDto.VerificationCode)
+                return false;
+            if (User.ResetPasswordExpiry == null || User.ResetPasswordExpiry < DateTime.UtcNow)
+                return false;
+            var identityToken = User.ResetPasswordToken;
 
+            if (string.IsNullOrEmpty(identityToken))
+                return false;
+            var result = await userManager.ResetPasswordAsync(User, identityToken, resetDto.NewPassword);
+            if (!result.Succeeded)
+                return false;
+            User.ResetPasswordCode = null;
+            User.ResetPasswordToken = null;
+            User.ResetPasswordExpiry = null;
 
-        //public async  Task<bool> ForgotPasswordAsync(ForgetPasswordDto passwordDto)
-        //{
-        //    var User = await userManager.FindByEmailAsync(passwordDto.Email);
-        //    if (User is null)
-        //        return true;
-        //    else
-        //    {
-        //        var token = await userManager.GeneratePasswordResetTokenAsync(User);
-        //        var verificationCodeBody = $"Your password reset code is: {token}. Please use this code to reset your password.";
-        //        var email = new Email()
-        //        {
-        //            To = passwordDto.Email,
-        //            Subject = "Varify Code",
-        //            Body = verificationCodeBody
+          var Result=  await userManager.UpdateAsync(User);
+            return result.Succeeded;
+            
 
-        //        };
-        //        EmailSetting.SendEmail(email);
-
-        //    }
-        //}
+        }
     }
 }

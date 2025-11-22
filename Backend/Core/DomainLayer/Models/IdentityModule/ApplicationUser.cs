@@ -14,5 +14,8 @@ namespace DomainLayer.Models.Users
        
         public string DisplayName { get; set; } = default!;
         public string UserType { get; set; } = default!;
+        public string? ResetPasswordCode { get; set; }
+        public string? ResetPasswordToken { get; set; }
+        public DateTime? ResetPasswordExpiry { get; set; }
     }
 }
