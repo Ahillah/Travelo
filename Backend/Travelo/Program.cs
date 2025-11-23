@@ -61,6 +61,9 @@ namespace Travelo
               .AddEntityFrameworkStores<TraveloIdentityDbContext>()
               .AddDefaultTokenProviders();
             builder.Services.AddScoped<ITouristAuthService, TouristAuthService>();
+           
+            builder.Services.AddScoped<IHotelAuthService, HotelAuthService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

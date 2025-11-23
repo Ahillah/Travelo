@@ -237,6 +237,16 @@ namespace Persistence.Identity.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DomainLayer.Models.IdentityModule.Hotel", b =>
+                {
+                    b.HasBaseType("DomainLayer.Models.Users.ApplicationUser");
+
+                    b.Property<int>("HotelId")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Hotel");
+                });
+
             modelBuilder.Entity("DomainLayer.Models.IdentityModule.Tourist", b =>
                 {
                     b.HasBaseType("DomainLayer.Models.Users.ApplicationUser");

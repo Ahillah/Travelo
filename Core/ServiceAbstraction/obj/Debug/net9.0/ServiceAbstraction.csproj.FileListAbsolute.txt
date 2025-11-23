@@ -1,0 +1,16 @@
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\bin\Debug\net9.0\ServiceAbstraction.deps.json
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\bin\Debug\net9.0\ServiceAbstraction.dll
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\bin\Debug\net9.0\ServiceAbstraction.pdb
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\bin\Debug\net9.0\Shared.dll
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\bin\Debug\net9.0\Shared.pdb
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\ServiceAbstraction.csproj.AssemblyReference.cache
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\ServiceAbstraction.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\ServiceAbstraction.AssemblyInfoInputs.cache
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\ServiceAbstraction.AssemblyInfo.cs
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\ServiceAbstraction.csproj.CoreCompileInputs.cache
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\ServiceAbstraction.sourcelink.json
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\ServiceA.44E702FF.Up2Date
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\ServiceAbstraction.dll
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\refint\ServiceAbstraction.dll
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\ServiceAbstraction.pdb
+C:\Users\ENG MENNA\Travelo\Core\ServiceAbstraction\obj\Debug\net9.0\ref\ServiceAbstraction.dll

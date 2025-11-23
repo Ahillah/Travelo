@@ -15,6 +15,7 @@ namespace Persistence.Identity
         : IdentityDbContext<ApplicationUser, IdentityRole, string>(options)
     {
         public DbSet<Tourist> Tourists { get; set; }
+        public DbSet<Hotel> Hotels { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
