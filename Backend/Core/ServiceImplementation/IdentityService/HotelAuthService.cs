@@ -19,6 +19,8 @@ using ServiceAbstraction;
 using Shared;
 using Shared.Dto_s.IdentityDto_s;          // AuthResponseDto, ForgetPasswordDto لو مشتركين
 using Shared.Dto_s.IdentityDto_s.HotelUser; // LoginHotelDto, HotelRegisterDto, ForgetPasswordHotelDto (عدّلي حسب فولدراتك)
+using Shared.Dto_s.IdentityDto_s.SecurityUser;
+using Shared.Dto_s.IdentityDto_s.TouristUser;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -43,7 +45,7 @@ namespace ServiceImplementation.IdentityService
         // ============================
         //      Login  (Hotel User)
         // ============================
-        public async Task<AuthResponseHotelDto> LoginAsync(LoginHotelDto login)
+        public async Task<AuthResponseHotelDto> LoginHotelAsync(LoginHotelDto login)
         {
             // هتدوري بالـ Email
             var user = await userManager.FindByEmailAsync(login.Email);
@@ -77,7 +79,7 @@ namespace ServiceImplementation.IdentityService
         // ============================
         //      Register  (Hotel User)
         // ============================
-        public async Task<AuthResponseHotelDto> RegisterhotelAsync(RegisterHotelDto model)
+        public async Task<AuthResponseHotelDto> RegisterHotelAsync(RegisterHotelDto model)
         {
             // HotelUser : ApplicationUser
             var user = new Hotel()
@@ -153,21 +155,178 @@ namespace ServiceImplementation.IdentityService
         // ============================
         //  Forgot Password (Hotel)
         // ============================
-        public Task<bool> ForgotPasswordHotelAsync(ForgetPasswordHotelDto model)
+        public async Task<bool> ForgotPasswordHotelAsync(ForgetPasswordHotelDto passwordDto)
         {
-            // نفس فكرة ForgotPasswordAsync للـ Tourist
-            throw new NotImplementedException();
-        }
+            /* var user = await userManager.FindByEmailAsync(passwordDto.Email);
+             if (user is null)
+                 return false;
 
-        public Task<AuthResponseHotelDto> RegisterAsync(RegisterHotelDto model)
-        {
-            throw new NotImplementedException();
-        }
+             // 👈 هنا الشرط المهم: لازم يكون Hotel
+             var isHotel = await userManager.IsInRoleAsync(user, "Hotel");
+             if (!isHotel)
+                 return false;
 
-        public Task<bool> ForgotlPasswordAsync(ForgetPasswordHotelDto model)
-        {
-            throw new NotImplementedException();
+             var identityToken = await userManager.GeneratePasswordResetTokenAsync(user);
+
+             var random = new Random();
+             string shortCode = random.Next(10000, 99999).ToString();
+
+             var verificationCodeBody =
+                 $"Your password reset code is: {shortCode}. Please use this code to reset your password.";
+
+             user.ResetPasswordCode = shortCode;
+             user.ResetPasswordToken = identityToken;
+             user.ResetPasswordExpiry = DateTime.UtcNow.AddMinutes(10);
+
+             await userManager.UpdateAsync(user);
+
+             var email = new Email
+             {
+                 To = passwordDto.Email,
+                 Subject = "Verify Code",
+                 Body = verificationCodeBody
+             };
+
+             EmailSetting.SendEmail(email);
+
+             return true;*/
+            var user = await userManager.FindByEmailAsync(passwordDto.Email);
+            if (user is null)
+                return false;
+
+            // نتأكد إنه فعلاً Hotel عن طريق UserType
+            if (user.UserType != "Hotel")
+                return false;
+
+            var identityToken = await userManager.GeneratePasswordResetTokenAsync(user);
+
+            var random = new Random();
+            string shortCode = random.Next(10000, 99999).ToString();
+
+            var verificationCodeBody =
+                $"Your password reset code is: {shortCode}. Please use this code to reset your password.";
+
+            user.ResetPasswordCode = shortCode;
+            user.ResetPasswordToken = identityToken;
+            user.ResetPasswordExpiry = DateTime.UtcNow.AddMinutes(10);
+
+            await userManager.UpdateAsync(user);
+
+            var email = new Email
+            {
+                To = passwordDto.Email,
+                Subject = "Verify Code",
+                Body = verificationCodeBody
+            };
+
+            EmailSetting.SendEmail(email);
+
+            return true;
         }
+       
+
+      
+        public async Task<bool> ResetPasswordHotelAsync(ResetPasswordHotelDto resetDto)
+        {
+            /* var user = await userManager.FindByEmailAsync(resetDto.Email);
+             if (user is null)
+                 return false;
+
+             // 👈 برضه نتأكد إنه Hotel
+             var isHotel = await userManager.IsInRoleAsync(user, "Hotel");
+             if (!isHotel)
+                 return false;
+
+             if (user.ResetPasswordCode != resetDto.VerificationCode)
+                 return false;
+
+             if (user.ResetPasswordExpiry == null || user.ResetPasswordExpiry < DateTime.UtcNow)
+                 return false;
+
+             var identityToken = user.ResetPasswordToken;
+
+             if (string.IsNullOrEmpty(identityToken))
+                 return false;
+
+             var result = await userManager.ResetPasswordAsync(user, identityToken, resetDto.NewPassword);
+             if (!result.Succeeded)
+                 return false;
+
+             user.ResetPasswordCode = null;
+             user.ResetPasswordToken = null;
+             user.ResetPasswordExpiry = null;
+
+             await userManager.UpdateAsync(user);
+
+             return true;*/
+
+
+            // 1) نجيب اليوزر بالإيميل
+            var user = await userManager.FindByEmailAsync(resetDto.Email);
+            if (user == null)
+            {
+                Console.WriteLine("[Reset] User not found");
+                return false;
+            }
+
+            // 2) نتأكد إنه Hotel (لو عندك UserType)
+            if (user.UserType != "Hotel")
+            {
+                Console.WriteLine("[Reset] User is not Hotel");
+                return false;
+            }
+
+            // 3) الكود
+            Console.WriteLine($"[Reset] Stored code: {user.ResetPasswordCode}, Sent: {resetDto.VerificationCode}");
+            if (user.ResetPasswordCode != resetDto.VerificationCode)
+            {
+                Console.WriteLine("[Reset] Code mismatch");
+                return false;
+            }
+
+            // 4) الصلاحية
+            Console.WriteLine($"[Reset] Expiry: {user.ResetPasswordExpiry}, Now: {DateTime.UtcNow}");
+            if (user.ResetPasswordExpiry == null || user.ResetPasswordExpiry < DateTime.UtcNow)
+            {
+                Console.WriteLine("[Reset] Code expired");
+                return false;
+            }
+
+            // 5) التوكن
+            var identityToken = user.ResetPasswordToken;
+            if (string.IsNullOrEmpty(identityToken))
+            {
+                Console.WriteLine("[Reset] Identity token is null or empty");
+                return false;
+            }
+
+            // 6) Reset الباسورد
+            var resetResult = await userManager.ResetPasswordAsync(user, identityToken, resetDto.NewPassword);
+            if (!resetResult.Succeeded)
+            {
+                Console.WriteLine("[Reset] ResetPasswordAsync failed:");
+                foreach (var error in resetResult.Errors)
+                {
+                    Console.WriteLine($" - {error.Code}: {error.Description}");
+                }
+                return false;
+            }
+
+            // 7) ننضف بيانات الريسيت
+            user.ResetPasswordCode = null;
+            user.ResetPasswordToken = null;
+            user.ResetPasswordExpiry = null;
+
+            var updateResult = await userManager.UpdateAsync(user);
+
+            Console.WriteLine($"[Reset] Update result: {updateResult.Succeeded}");
+            return updateResult.Succeeded;
+
+        }
+     
+
+
+
     }
 }
 
