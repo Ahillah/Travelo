@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Persistence.Identity;
+using Persistence;
 using ServiceAbstraction;
 using ServiceImplementation.IdentityService;
 using System.Text;

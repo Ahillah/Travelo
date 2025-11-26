@@ -1,4 +1,5 @@
-﻿using DomainLayer.Models.IdentityModule;
+﻿using DomainLayer.Models;
+using DomainLayer.Models.IdentityModule;
 using DomainLayer.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -9,13 +10,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistence.Identity
+namespace Persistence
 {
     public class TraveloIdentityDbContext(DbContextOptions<TraveloIdentityDbContext> options)
         : IdentityDbContext<ApplicationUser, IdentityRole, string>(options)
     {
         public DbSet<Tourist> Tourists { get; set; }
         public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

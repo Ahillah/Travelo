@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Persistence.Identity.Migrations
 {
     [DbContext(typeof(TraveloIdentityDbContext))]
-    [Migration("20251123131926_SecoundResetPassword")]
-    partial class SecoundResetPassword
+    [Migration("20251125145501_HotelAccount")]
+    partial class HotelAccount
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
