@@ -1,7 +1,7 @@
-import photo from "../../../../assets/images/RECTANGLE.png"
-import G from "../../../../assets/icons/GG.png"
-import vector from "../../../../assets/icons/Vector.png"
-import hotel from "../../../../assets/icons/hotel.png"
+import photo from "../../../assets/images/RECTANGLE.png"
+import G from "../../../assets/icons/GG.png"
+import vector from "../../../assets/icons/Vector.png"
+import hotel from "../../../assets/icons/hotel.png"
 import { useNavigate } from "react-router-dom";
 import "../auth.css";
 import { useState } from "react";
