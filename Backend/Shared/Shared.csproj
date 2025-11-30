@@ -10,4 +10,8 @@
     <Folder Include="Dto%27s\LocationDto%27s\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
 </Project>
